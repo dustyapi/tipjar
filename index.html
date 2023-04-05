@@ -34,10 +34,10 @@
       function signInTransactionAndSendMoney(destPubkeyStr, lamports) {
         (async () => {
           const network = "https://api.metaplex.solana.com/";
-          console.log("network is ",network)
+          console.log("network is ", network);
+
           const connection = new solanaWeb3.Connection(network);
           const transaction = new solanaWeb3.Transaction();
-
           lamports =
             document.getElementById("quantity").value * lamports_per_sol;
 
@@ -92,6 +92,17 @@
 
         async function signAndSendTransaction(wallet, transaction, connection) {
           // Sign transaction, broadcast, and confirm
+          if (window.solana && window.solana.isConnected) {
+            // Get the public key of the connected wallet
+            publicKey = new solanaWeb3.PublicKey(
+              window.solana.publicKey.toString()
+            );
+            console.log("Connected wallet address:", publicKey.toBase58());
+          } else {
+            console.log(
+              "Please install and connect the Phantom wallet extension to access the Solana network."
+            );
+          }
           const { signature } = await window.solana.signAndSendTransaction(
             transaction
           );
